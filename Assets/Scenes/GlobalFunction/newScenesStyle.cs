@@ -32,7 +32,6 @@ public class newScenesStyle : MonoBehaviour
                 item.name = this.name;
                 Destroy(gameObject);
             }
-            var v1 = this.transform.localPosition;
             transform.Translate(Vector3.left * (Time.deltaTime * 16));
         }
     }

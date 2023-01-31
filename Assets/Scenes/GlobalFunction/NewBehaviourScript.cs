@@ -9,7 +9,6 @@ public class NewBehaviourScript : MonoBehaviour
 
     public GameObject Itme_Ground;
     public GameObject Itme_GroundStyle;
-    public GameObject Itme_Obstacle;
     private int fpsOfCreateObstacle = 0;
     private int fpsOfCreateObstacle_count = 0;
 
@@ -53,13 +52,39 @@ public class NewBehaviourScript : MonoBehaviour
         }
 
         fpsOfCreateObstacle_count++;
-        if (fpsOfCreateObstacle_count >= fpsOfCreateObstacle)
-        {
-            var vItme_Obstacle = Itme_Obstacle.transform.localPosition;
-            var itemObstacle = Instantiate(Itme_Obstacle, vItme_Obstacle, Quaternion.identity);
-            itemObstacle.name = Itme_Obstacle.name + "_";
-            fpsOfCreateObstacle_count = 0;
-            fpsOfCreateObstacle = Random.Range(50, 210);
+        if (fpsOfCreateObstacle_count >= fpsOfCreateObstacle) {
+            if (fpsOfCreateObstacle < 180)
+            {
+                List<string> Obstacle_Mode =
+                    new List<string> {
+                        "GameCore/Prefab/Cactus",
+                        "GameCore/Prefab/Cactus_big",
+                    };
+
+                var itemObstacle = Instantiate(
+                    Resources.Load(Obstacle_Mode[Random.Range(0, 2)]),
+                    new Vector3(55f, -6.22f, 90f),
+                    Quaternion.identity
+                    );
+                fpsOfCreateObstacle_count = 0;
+                fpsOfCreateObstacle = Random.Range(50, 210);
+            }
+            else if (fpsOfCreateObstacle >= 180)
+            {
+                List<float> Position_Mode =
+                    new List<float> {
+                        -3f,
+                        -5f,
+                        -6.35f,
+                    };
+                var itemObstacle = Instantiate(
+                    Resources.Load("GameCore/Prefab/Bird"),
+                    new Vector3(55f, Position_Mode[Random.Range(0, 3)], 90f),
+                    Quaternion.identity
+                    );
+                fpsOfCreateObstacle_count = 0;
+                fpsOfCreateObstacle = Random.Range(50, 210);
+            }
         }
     }
 }

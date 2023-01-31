@@ -10,8 +10,8 @@ public class Dinosaur : MonoBehaviour
     static public bool GameStart = false;
     public Animator dinosaurAni;
     public new PolygonCollider2D collider;
-    public BoxCollider2D groundCollider;
     public TextMeshProUGUI  Item_MainText;
+    private bool canJump = true;
 
     List<List<Vector2>> colliderMode = new List<List<Vector2>>{
         new List<Vector2>{
@@ -49,24 +49,24 @@ public class Dinosaur : MonoBehaviour
     {
         if (
             GameLose == false &&
-            (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow)) &&
-            collider.IsTouching(groundCollider)
-
+            (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.touchCount > 0 || Input.GetMouseButton(0)) &&
+            canJump == true
         )
         {
+            canJump = false;
             rb.AddForce(new Vector2(0, 35), ForceMode2D.Impulse);
             if (GameStart == false)
             {
+                Item_MainText.text = "";
                 dinosaurAni.SetBool("GameStart", true);
                 GameStart = true;
             }
-            Item_MainText.text = "";
         }
 
         if (GameStart == false)
             return;
 
-        if (Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.DownArrow) || Input.GetMouseButton(1))
         {
             dinosaurAni.SetBool("Squat",true);
             collider.SetPath(0,colliderMode[1]);
@@ -87,6 +87,10 @@ public class Dinosaur : MonoBehaviour
             dinosaurAni.SetBool("GameLose", true);
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             Item_MainText.text = "Game Over!";
+        }
+        if(collision.gameObject.tag == "Ground")
+        {
+            canJump = true;
         }
     }
 }
